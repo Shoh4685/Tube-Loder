@@ -1,45 +1,49 @@
 import streamlit as st
 import yt_dlp
-import os
-import tempfile
 
 # Page Config
-st.set_page_config(page_title="Tube-Loder", page_icon="📥")
-st.title("Tube-Loder")
-st.markdown("Download videos at the **highest resolution** available.")
+st.set_page_config(page_title="YT Downloader", page_icon="📥")
+st.title("🚀 Fast High-Res Downloader")
+st.write("This version generates a direct link to bypass server limits.")
 
-# UI Inputs
-video_url = st.text_input("Paste YouTube URL here:", placeholder="https://www.youtube.com/watch?v=...")
-quality_option = st.selectbox("Select Quality:", ["Best Available (4K/1080p)", "Standard (720p/MP4)"])
+video_url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
-if st.button("Prepare Download"):
-    if video_url:
-        try:
-            # Create a temporary directory on the server
-            with tempfile.TemporaryDirectory() as tmpdirname:
-                st.info("Processing... This may take a minute for high-res videos.")
+if video_url:
+    try:
+        # Options to just extract the data
+        ydl_opts = {
+            'format': 'best',
+            'quiet': True,
+            'no_warnings': True,
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        }
+        
+        with st.spinner("Fetching direct link..."):
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(video_url, download=False)
+                # YouTube provides a direct URL to the video stream
+                download_url = info.get('url')
+                title = info.get('title', 'video')
+                thumbnail = info.get('thumbnail')
+
+        if download_url:
+            st.image(thumbnail, width=300)
+            st.success(f"**Found:** {title}")
+            
+            # Show a preview player
+            st.video(download_url)
+            
+            # The direct download link
+            st.markdown(f"""
+                ### 📥 Download Link
+                [Click here to open the raw video file]({download_url})
                 
-                # Configuration for yt-dlp
-                ydl_opts = {
-                    'format': 'bestvideo+bestaudio/best' if "Best" in quality_option else 'best',
-                    'outtmpl': os.path.join(tmpdirname, '%(title)s.%(ext)s'),
-                    'noplaylist': True,
-                }
+                **Instructions:** 1. Click the link above.
+                2. Once the video opens, **Right-Click** on it.
+                3. Select **'Save Video As...'** to save it to your device.
+            """, unsafe_allow_html=True)
+        else:
+            st.error("Could not generate a direct download link for this video.")
 
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    info = ydl.extract_info(video_url, download=True)
-                    file_path = ydl.prepare_filename(info)
-                    
-                    # Read the file into memory to give to the user
-                    with open(file_path, "rb") as f:
-                        btn = st.download_button(
-                            label="📥 Download Video to Computer",
-                            data=f,
-                            file_name=os.path.basename(file_path),
-                            mime="video/mp4"
-                        )
-                st.success("Ready! Click the button above to save the file.")
-        except Exception as e:
-            st.error(f"Error: {e}")
-    else:
-        st.warning("Please enter a URL first.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
