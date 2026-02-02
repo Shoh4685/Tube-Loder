@@ -54,3 +54,14 @@ if video_url:
                             with open(file_path, "rb") as f:
                                 data = f.read()
                                 st.audio(data, format="audio/mp4")
+                                st.download_button(
+                                    label="📥 Save Audio File",
+                                    data=data,
+                                    file_name=f"{title}.m4a",
+                                    mime="audio/mp4"
+                                )
+                        else:
+                            st.error("Audio processing failed. Check logs for FFmpeg errors.")
+
+    except Exception as e:
+        st.error(f"Error: {e}")
