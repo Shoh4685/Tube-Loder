@@ -2,7 +2,7 @@ import streamlit as st
 import yt_dlp
 
 # Page Config
-st.set_page_config(page_title="YT Downloader", page_icon="📥")
+st.set_page_config(page_title="Tube-Loder", page_icon="📥")
 st.title("Tube-Loder")
 st.write("Max download 360p")
 
@@ -47,5 +47,6 @@ if video_url:
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
+
 
 
