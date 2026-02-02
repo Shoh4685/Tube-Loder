@@ -4,27 +4,42 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="📥",
+    page_icon="📥", 
     layout="centered"
 )
 
-# --- Smart UI Styling ---
+# --- Smart Animated Background & CSS ---
 st.markdown("""
     <style>
-    /* Smart Mesh Gradient Background */
+    /* Animated Smart Background */
     .stApp {
-        background: radial-gradient(at 0% 0%, rgba(64, 93, 230, 0.15) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(193, 53, 132, 0.15) 0px, transparent 50%),
-                    #0f172a;
+        background: linear-gradient(125deg, #000000, #000000, #1a0b2e, #2e0b1a, #000000);
+        background-size: 400% 400%;
+        animation: gradientAnimation 15s ease infinite;
     }
-    
-    /* Frosted Glass Input Box */
+
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Glassmorphism Card Effect */
+    .video-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 20px;
+    }
+
+    /* Input Box Styling */
     .stTextInput>div>div>input {
         border-radius: 12px;
-        background-color: rgba(255, 255, 255, 0.05) !important;
+        background-color: rgba(255, 255, 255, 0.07);
         color: white;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     /* Instagram Gradient Button */
@@ -32,78 +47,60 @@ st.markdown("""
         width: 100%;
         border-radius: 12px;
         height: 3.5em;
-        background: linear-gradient(45deg, #405DE6, #833AB4, #E1306C, #FD1D1D);
+        background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
         color: white;
         border: none;
         font-weight: bold;
-        font-size: 16px;
-        box-shadow: 0 4px 15px rgba(225, 48, 108, 0.3);
-        transition: all 0.3s ease;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     
     .stButton>button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(225, 48, 108, 0.5);
+        box-shadow: 0 6px 20px rgba(193, 53, 132, 0.4);
         color: white;
     }
 
-    /* Glassmorphism Card for Video Info */
-    .video-card {
-        background: rgba(255, 255, 255, 0.03);
-        padding: 25px;
-        border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        margin-top: 20px;
-    }
-
-    /* Download Button - Gold Gradient */
-    .download-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.8em;
-        background: linear-gradient(45deg, #FFD700, #FFA500);
-        color: #000 !important;
-        text-decoration: none !important;
-        border-radius: 12px;
-        font-weight: 700;
-        text-align: center;
-        margin-top: 15px;
-        transition: opacity 0.2s;
-    }
-    .download-btn:hover {
-        opacity: 0.9;
-    }
-
-    /* Gradient Title */
+    /* Headline Gradient */
     h1 {
-        background: -webkit-linear-gradient(45deg, #FFD700, #E1306C, #833AB4);
+        background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800 !important;
         letter-spacing: -1px;
     }
-    
-    .stMarkdown h5 {
-        color: #94a3b8;
-        font-weight: 400;
+
+    .download-btn {
+        display: block;
+        padding: 12px;
+        background: linear-gradient(45deg, #F58529, #FEDA77);
+        color: #000 !important;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 800;
+        text-align: center;
+        margin-top: 15px;
+        transition: 0.3s;
+    }
+
+    .download-btn:hover {
+        transform: scale(1.02);
+        filter: brightness(1.1);
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- Header Section ---
+# --- UI Header ---
 st.title("TubeLoader")
-st.markdown("##### Smart metadata & high-speed stream extraction")
+st.markdown("<p style='color: #888;'>Premium stream extraction with a conscience.</p>", unsafe_allow_html=True)
 
-# --- Input Section ---
-with st.container():
-    video_url = st.text_input("", placeholder="Paste your link here...")
-    fetch_button = st.button("Fetch Media")
+# --- Logic Section ---
+video_url = st.text_input("", placeholder="Paste link and let the magic happen...")
+fetch_button = st.button("Generate Link")
 
 if video_url or fetch_button:
     if not video_url:
-        st.warning("Please enter a URL first!")
+        st.warning("Input a URL to proceed.")
     else:
         try:
             ydl_opts = {
@@ -113,46 +110,39 @@ if video_url or fetch_button:
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             }
             
-            with st.spinner("✨ Deciphering stream..."):
+            with st.spinner("🧠 Analyzing stream protocols..."):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(video_url, download=False)
                     download_url = info.get('url')
                     title = info.get('title', 'Video Content')
                     thumbnail = info.get('thumbnail')
                     duration = info.get('duration_string')
-                    views = info.get('view_count', 0)
 
             if download_url:
-                # --- Result UI with Glass Card ---
+                # --- The Glassmorphism Card ---
                 st.markdown('<div class="video-card">', unsafe_allow_html=True)
-                col1, col2 = st.columns([1, 1.3], gap="large")
+                col1, col2 = st.columns([1, 1.2], gap="large")
                 
                 with col1:
                     st.image(thumbnail, use_container_width=True)
                 
                 with col2:
-                    st.subheader(title)
-                    st.write(f"⏱️ **Duration:** {duration}")
-                    st.write(f"👁️ **Views:** {views:,}")
-                    
-                    st.markdown(f"""
-                        <a href="{download_url}" target="_blank" class="download-btn">📥 DOWNLOAD FILE</a>
-                        <p style="font-size: 0.8rem; color: #64748b; margin-top: 15px;">
-                        <b>Tip:</b> If the link opens a player, right-click and 'Save Video As'.
-                        </p>
-                    """, unsafe_allow_html=True)
+                    st.markdown(f"### {title}")
+                    st.markdown(f"**Length:** {duration}")
+                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">OPEN RAW STREAM</a>', unsafe_allow_html=True)
+                    st.caption("Right-click video player to 'Save As'")
+                
                 st.markdown('</div>', unsafe_allow_html=True)
 
-                # Preview
-                with st.expander("📺 Show Video Preview", expanded=True):
-                    st.video(download_url)
+                st.markdown("#### Preview")
+                st.video(download_url)
                 
             else:
-                st.error("Could not find a streamable link.")
+                st.error("Link extraction failed. Try a different URL.")
 
         except Exception as e:
-            st.error(f"Something went wrong. This video might be protected.")
+            st.error("Access denied or invalid URL.")
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<center style='color: #475569; font-size: 0.8rem;'>Made with not ❤️ but hate for capitalism</center>", unsafe_allow_html=True)
+st.markdown("<center style='opacity: 0.5; font-size: 0.8rem;'>Made with not ❤️ but hate for capitalism</center>", unsafe_allow_html=True)
