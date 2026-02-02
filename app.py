@@ -1,49 +1,44 @@
 import streamlit as st
 import yt_dlp
+import os
+import tempfile
 
-# Page Config
-st.set_page_config(page_title="YT Downloader", page_icon="📥")
-st.title("🚀 Fast High-Res Downloader")
-st.write("This version generates a direct link to bypass server limits.")
+st.set_page_config(page_title="Ultra HD Downloader", page_icon="🎬")
+st.title("🎬 Ultra HD Video Downloader")
+st.write("Downloads the highest available resolution (4K/1080p).")
 
-video_url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
+video_url = st.text_input("Paste YouTube Link:")
 
 if video_url:
     try:
-        # Options to just extract the data
-        ydl_opts = {
-            'format': 'best',
-            'quiet': True,
-            'no_warnings': True,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        }
-        
-        with st.spinner("Fetching direct link..."):
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(video_url, download=False)
-                # YouTube provides a direct URL to the video stream
-                download_url = info.get('url')
-                title = info.get('title', 'video')
-                thumbnail = info.get('thumbnail')
+        # Use a temporary directory so we don't clog the server
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            
+            # Format: 'bestvideo+bestaudio/best' forces the highest quality merge
+            ydl_opts = {
+                'format': 'bestvideo+bestaudio/best',
+                'outtmpl': os.path.join(tmp_dir, '%(title)s.%(ext)s'),
+                'merge_output_format': 'mp4', # Ensures it stays in a standard format
+                'noplaylist': True,
+            }
 
-        if download_url:
-            st.image(thumbnail, width=300)
-            st.success(f"**Found:** {title}")
-            
-            # Show a preview player
-            st.video(download_url)
-            
-            # The direct download link
-            st.markdown(f"""
-                ### 📥 Download Link
-                [Click here to open the raw video file]({download_url})
-                
-                **Instructions:** 1. Click the link above.
-                2. Once the video opens, **Right-Click** on it.
-                3. Select **'Save Video As...'** to save it to your device.
-            """, unsafe_allow_html=True)
-        else:
-            st.error("Could not generate a direct download link for this video.")
+            if st.button("Prepare High-Res Download"):
+                with st.spinner("Downloading and Merging highest quality... this takes a moment."):
+                    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                        info = ydl.extract_info(video_url, download=True)
+                        file_path = ydl.prepare_filename(info)
+                        
+                        # Once finished, let user download the merged file
+                        with open(file_path, "rb") as f:
+                            st.download_button(
+                                label="📥 Save High-Res Video to Device",
+                                data=f,
+                                file_name=os.path.basename(file_path),
+                                mime="video/mp4"
+                            )
+                st.success("Merge complete! Click the button above.")
 
     except Exception as e:
-        st.error(f"An error occurred: {e}")
+        st.error(f"Error: {e}")
+        if "ffmpeg" in str(e).lower():
+            st.warning("FFmpeg is missing! Ensure 'packages.txt' contains 'ffmpeg' on your GitHub.")
