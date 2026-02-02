@@ -4,35 +4,35 @@ import os
 import tempfile
 
 st.set_page_config(page_title="Tube-Loder Audio", page_icon="🎵")
-st.title("🎵 Tube-Loder: Audio Downloader")
+st.title("🎵 Tube-Loder: Final Fix")
 
-video_url = st.text_input("Paste YouTube Link:")
+video_url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
 if video_url:
     try:
-        # Check for cookies.txt (Essential for bypass)
-        cookie_path = 'cookies.txt'
-        if not os.path.exists(cookie_path):
-            st.error("❌ **Error:** Please upload `cookies.txt` to your GitHub repository.")
+        # 1. Verify Cookies (Crucial for bypass)
+        if not os.path.exists('cookies.txt'):
+            st.error("❌ cookies.txt not found! Upload it to GitHub to bypass the bot check.")
             st.stop()
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             ydl_opts = {
-                # 1. 'bestaudio' is the most compatible request
+                # 'bestaudio' is the most compatible request—it grabs WebM if M4A is hidden
                 'format': 'bestaudio/best', 
                 'outtmpl': os.path.join(tmp_dir, '%(title)s.%(ext)s'),
-                'cookiefile': cookie_path,
+                'cookiefile': 'cookies.txt',
                 'noplaylist': True,
                 'quiet': True,
+                'nocheckcertificate': True,
                 
-                # 2. This POST-PROCESSOR converts whatever YouTube gives us into M4A
-                # (M4A is generally more stable than MP3 on cloud servers)
+                # 2. The Converter: This turns the raw data into a standard M4A
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'm4a',
                     'preferredquality': '192',
                 }],
                 
+                # 3. 2026 Bypass Args
                 'extractor_args': {
                     'youtube': {
                         'player_client': ['ios', 'web'],
@@ -41,13 +41,14 @@ if video_url:
                 }
             }
 
-            if st.button("🎸 Convert to Audio"):
-                with st.spinner("Finding best stream and converting..."):
+            if st.button("🎸 Prepare Audio"):
+                with st.spinner("Extracting & Converting..."):
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                        # Extract and download in one step
                         info = ydl.extract_info(video_url, download=True)
-                        title = info.get('title', 'audio')
+                        title = info.get('title', 'audio_file')
                         
-                        # Locate the converted file
+                        # Find the file (it might have a slightly different name due to characters)
                         files = [f for f in os.listdir(tmp_dir) if f.endswith(".m4a")]
                         if files:
                             file_path = os.path.join(tmp_dir, files[0])
@@ -55,13 +56,11 @@ if video_url:
                                 data = f.read()
                                 st.audio(data, format="audio/mp4")
                                 st.download_button(
-                                    label="📥 Save Audio File",
+                                    label="📥 Save Audio",
                                     data=data,
                                     file_name=f"{title}.m4a",
                                     mime="audio/mp4"
                                 )
+                            st.success(f"Success: {title}")
                         else:
-                            st.error("Conversion failed. Check your 'packages.txt' for ffmpeg.")
-
-    except Exception as e:
-        st.error(f"Error: {e}")
+                            st.error
