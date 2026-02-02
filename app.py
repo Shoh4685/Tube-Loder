@@ -5,27 +5,34 @@ import tempfile
 
 st.set_page_config(page_title="Tube-Loder Audio", page_icon="🎵")
 st.title("🎵 Tube-Loder: Audio Downloader")
-st.write("Using authenticated session to bypass bot detection.")
+st.markdown("---")
 
 video_url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
 if video_url:
     try:
-        # Check if cookies.txt exists on the server
+        # Check for cookies.txt first (Essential for bypass)
         cookie_path = 'cookies.txt'
         if not os.path.exists(cookie_path):
-            st.error("❌ Missing cookies.txt! Please upload your exported cookies.txt to GitHub.")
+            st.error("❌ **Action Required:** Please upload `cookies.txt` to your GitHub repository.")
             st.stop()
 
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            # We use 'ba[ext=m4a]' for the most convenient direct audio stream
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            # 2026 STABILITY CONFIGURATION
             ydl_opts = {
-                'format': 'ba[ext=m4a]', 
-                'outtmpl': os.path.join(tmpdirname, '%(title)s.%(ext)s'),
-                'cookiefile': cookie_path,  # This tells YouTube you are a real user
+                # 'bestaudio/best' is the most flexible format request
+                'format': 'bestaudio/best', 
+                'outtmpl': os.path.join(tmp_dir, '%(title)s.%(ext)s'),
+                'cookiefile': cookie_path,
                 'noplaylist': True,
                 'quiet': True,
                 'nocheckcertificate': True,
+                # Force conversion to M4A or MP3 to ensure compatibility
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'm4a', # Most convenient & compatible
+                    'preferredquality': '192',
+                }],
                 'extractor_args': {
                     'youtube': {
                         'player_client': ['ios', 'web'],
@@ -34,24 +41,16 @@ if video_url:
                 }
             }
 
-            if st.button("🎸 Get Audio"):
-                with st.spinner("Authenticating and fetching audio..."):
+            if st.button("🎸 Prepare Audio Download"):
+                with st.spinner("Fetching best available format and converting..."):
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                         info = ydl.extract_info(video_url, download=True)
                         title = info.get('title', 'audio')
-                        file_path = ydl.prepare_filename(info)
                         
-                        with open(file_path, "rb") as f:
-                            data = f.read()
-                            st.audio(data, format="audio/mp4")
-                            st.download_button(
-                                label="📥 Save M4A Audio",
-                                data=data,
-                                file_name=f"{title}.m4a",
-                                mime="audio/mp4"
-                            )
-                st.success("Success!")
-
-    except Exception as e:
-        st.error(f"Error: {e}")
-        st.info("If you still see a bot error, try re-exporting fresh cookies from your browser.")
+                        # Find the actual file (yt-dlp may change extension after post-processing)
+                        files = [f for f in os.listdir(tmp_dir) if f.endswith(".m4a")]
+                        if files:
+                            file_path = os.path.join(tmp_dir, files[0])
+                            with open(file_path, "rb") as f:
+                                data = f.read()
+                                st.audio(data, format="audio/mp4")
