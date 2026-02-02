@@ -4,7 +4,7 @@ import yt_dlp
 # Page Config
 st.set_page_config(page_title="YT Downloader", page_icon="📥")
 st.title("Tube-Loder")
-st.write("Fuck CAPITALISM")
+st.write("Max download 360p")
 
 video_url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
@@ -47,4 +47,5 @@ if video_url:
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
+
 
