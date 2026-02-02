@@ -96,7 +96,7 @@ st.markdown("<p style='color: #888;'>Premium stream extraction with a conscience
 
 # --- Logic Section ---
 video_url = st.text_input("", placeholder="Paste link and let the magic happen...")
-fetch_button = st.button("Generate Link")
+fetch_button = st.button("Download")
 
 if video_url or fetch_button:
     if not video_url:
@@ -146,6 +146,7 @@ if video_url or fetch_button:
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("<center style='opacity: 0.5; font-size: 0.8rem;'>Made with not ❤️ but hate for capitalism</center>", unsafe_allow_html=True)
+
 
 
 
