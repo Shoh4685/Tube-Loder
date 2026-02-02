@@ -3,67 +3,66 @@ import yt_dlp
 import os
 import tempfile
 
-st.set_page_config(page_title="Tube-Loder 2026", page_icon="🎵")
-st.title("🎵 Tube-Loder: Final Stability Patch")
+st.set_page_config(page_title="Tube-Loder MP3", page_icon="🎵")
+st.title("🎵 Tube-Loder: Final MP3 Patch")
 
-# Simple, clean UI
 url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
 if url:
-    if st.button("🚀 Start Conversion"):
-        # 1. Check for the Cookie File
+    if st.button("🚀 Convert to MP3 (192kbps)"):
+        # 1. Essential Check for Cookie File
         if not os.path.exists('cookies.txt'):
-            st.error("❌ Error: 'cookies.txt' not found in GitHub. YouTube is blocking the server.")
+            st.error("❌ 'cookies.txt' not found! Please upload it to your GitHub repository.")
             st.stop()
 
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
-                # 2. Flexible Options: Download BEST audio and convert it locally
+                # 2. Flexible Options: Grab whatever is best and transcode locally
                 ydl_opts = {
-                    'format': 'bestaudio/best',  # Don't specify extension here
+                    'format': 'bestaudio/best',  # Flexible selection to avoid 403/Format errors
                     'outtmpl': os.path.join(tmpdir, '%(title)s.%(ext)s'),
                     'cookiefile': 'cookies.txt',
                     'nocheckcertificate': True,
                     'quiet': True,
-                    # Post-processor handles the conversion to M4A (most stable format)
+                    # Forced Transcoding to MP3 192kbps
                     'postprocessors': [{
                         'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'm4a',
+                        'preferredcodec': 'mp3',
                         'preferredquality': '192',
                     }],
                     'extractor_args': {
                         'youtube': {
+                            # iOS is currently the most 'trusted' client by YouTube
                             'player_client': ['ios', 'web'],
                             'po_token': ['web+generated'],
                         }
                     }
                 }
 
-                with st.spinner("Bypassing filters and extracting audio..."):
+                with st.spinner("Extracting and Converting... This takes about 30-60 seconds."):
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                        # Extract and download in one step
                         info = ydl.extract_info(url, download=True)
                         title = info.get('title', 'audio_file')
                         
-                        # Find the output file
-                        files = [f for f in os.listdir(tmpdir) if f.endswith(".m4a")]
+                        # Locate the MP3 (yt-dlp changes the extension after processing)
+                        files = [f for f in os.listdir(tmpdir) if f.endswith(".mp3")]
                         
                         if files:
                             target_file = os.path.join(tmpdir, files[0])
                             with open(target_file, "rb") as f:
                                 audio_data = f.read()
                             
-                            st.success(f"✅ Successfully extracted: {title}")
-                            st.audio(audio_data, format="audio/mp4")
+                            st.success(f"✅ Ready: {title}")
+                            st.audio(audio_data, format="audio/mpeg")
                             st.download_button(
-                                label="📥 Download Audio File",
+                                label="📥 Download MP3 to Computer",
                                 data=audio_data,
-                                file_name=f"{title}.m4a",
-                                mime="audio/mp4"
+                                file_name=f"{title}.mp3",
+                                mime="audio/mpeg"
                             )
                         else:
-                            st.error("Conversion failed. Is 'ffmpeg' in your packages.txt?")
+                            st.error("Conversion failed. Ensure 'ffmpeg' is in your packages.txt.")
 
         except Exception as e:
-            st.error(f"Critical Failure: {e}")
-            st.info("Try deleting the app from Streamlit Cloud and redeploying to get a fresh IP address.")
+            st.error(f"Critical Error: {e}")
+            st.info("💡 Hint: If it still fails, your cookies may have expired. Re-export them from YouTube!")
