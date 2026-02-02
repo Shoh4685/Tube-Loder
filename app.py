@@ -91,7 +91,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- UI Header ---
-st.title("Icon.png""TubeLoader")
+st.title("Icon.png"      "TubeLoader")
 st.markdown("<p style='color: #888;'>Premium stream extraction with a conscience.</p>", unsafe_allow_html=True)
 
 # --- Logic Section ---
@@ -146,5 +146,6 @@ if video_url or fetch_button:
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("<center style='opacity: 0.5; font-size: 0.8rem;'>Made with not ❤️ but hate for capitalism</center>", unsafe_allow_html=True)
+
 
 
