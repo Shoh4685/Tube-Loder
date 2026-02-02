@@ -3,8 +3,8 @@ import yt_dlp
 
 # --- Page Config ---
 st.set_page_config(
-    page_title="Tube-Loader | Pro", 
-    page_icon="📥", 
+    page_title="TubeLoader", 
+    page_icon="Gemini_Generated_Image_a4qg97a4qg97a4qg.png", 
     layout="centered"
 )
 
@@ -117,3 +117,4 @@ if video_url or fetch_button:
 # --- Footer ---
 st.markdown("---")
 st.markdown("<center>Made with ❤️ for easy downloading</center>", unsafe_allow_html=True)
+
