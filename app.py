@@ -3,48 +3,47 @@ import yt_dlp
 import os
 import tempfile
 
-st.set_page_config(page_title="Tube-Loder MP3", page_icon="🎵")
-st.title("🎵 Tube-Loder: Final MP3 Patch")
+st.set_page_config(page_title="Tube-Loder Fix", page_icon="🎵")
+st.title("🎵 Tube-Loder: Emergency Patch")
 
 url = st.text_input("Paste YouTube Link:", placeholder="https://www.youtube.com/watch?v=...")
 
 if url:
-    if st.button("🚀 Convert to MP3 (192kbps)"):
-        # 1. Essential Check for Cookie File
+    if st.button("🚀 Force Download Audio"):
         if not os.path.exists('cookies.txt'):
-            st.error("❌ 'cookies.txt' not found! Please upload it to your GitHub repository.")
+            st.error("❌ 'cookies.txt' is missing from GitHub!")
             st.stop()
 
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
-                # 2. Flexible Options: Grab whatever is best and transcode locally
                 ydl_opts = {
-                    'format': 'bestaudio/best',  # Flexible selection to avoid 403/Format errors
+                    # 'best' is a single-file format. It's much harder for YT to hide this 
+                    # than separate high-res audio streams.
+                    'format': 'best', 
                     'outtmpl': os.path.join(tmpdir, '%(title)s.%(ext)s'),
                     'cookiefile': 'cookies.txt',
                     'nocheckcertificate': True,
                     'quiet': True,
-                    # Forced Transcoding to MP3 192kbps
+                    # We download the video file but ONLY extract the audio
                     'postprocessors': [{
                         'key': 'FFmpegExtractAudio',
                         'preferredcodec': 'mp3',
-                        'preferredquality': '192',
+                        'preferredquality': '128', # Lowering bitrate slightly for better server stability
                     }],
                     'extractor_args': {
                         'youtube': {
-                            # iOS is currently the most 'trusted' client by YouTube
-                            'player_client': ['ios', 'web'],
+                            'player_client': ['ios'], # ONLY use iOS client
                             'po_token': ['web+generated'],
                         }
                     }
                 }
 
-                with st.spinner("Extracting and Converting... This takes about 30-60 seconds."):
+                with st.spinner("Bypassing YouTube's format filters..."):
                     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                         info = ydl.extract_info(url, download=True)
                         title = info.get('title', 'audio_file')
                         
-                        # Locate the MP3 (yt-dlp changes the extension after processing)
+                        # Find the MP3 file
                         files = [f for f in os.listdir(tmpdir) if f.endswith(".mp3")]
                         
                         if files:
@@ -52,17 +51,16 @@ if url:
                             with open(target_file, "rb") as f:
                                 audio_data = f.read()
                             
-                            st.success(f"✅ Ready: {title}")
+                            st.success(f"✅ Success: {title}")
                             st.audio(audio_data, format="audio/mpeg")
                             st.download_button(
-                                label="📥 Download MP3 to Computer",
+                                label="📥 Download MP3",
                                 data=audio_data,
                                 file_name=f"{title}.mp3",
                                 mime="audio/mpeg"
                             )
                         else:
-                            st.error("Conversion failed. Ensure 'ffmpeg' is in your packages.txt.")
+                            st.error("Server could not find FFmpeg. Check 'packages.txt'.")
 
         except Exception as e:
-            st.error(f"Critical Error: {e}")
-            st.info("💡 Hint: If it still fails, your cookies may have expired. Re-export them from YouTube!")
+            st.error(f"Error: {e}")
