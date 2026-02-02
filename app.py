@@ -15,12 +15,18 @@ if video_url:
         with tempfile.TemporaryDirectory() as tmp_dir:
             
             # Format: 'bestvideo+bestaudio/best' forces the highest quality merge
-            ydl_opts = {
-                'format': 'bestvideo+bestaudio/best',
-                'outtmpl': os.path.join(tmp_dir, '%(title)s.%(ext)s'),
-                'merge_output_format': 'mp4', # Ensures it stays in a standard format
-                'noplaylist': True,
-            }
+           ydl_opts = {
+    'format': 'bestvideo+bestaudio/best',
+    'outtmpl': os.path.join(tmp_dir, '%(title)s.%(ext)s'),
+    'merge_output_format': 'mp4',
+    'noplaylist': True,
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['android', 'web'],
+            'po_token': ['web+generated'], # Attempts to generate a fresh token
+        }
+    }
+}
 
             if st.button("Prepare High-Res Download"):
                 with st.spinner("Downloading and Merging highest quality... this takes a moment."):
@@ -42,3 +48,4 @@ if video_url:
         st.error(f"Error: {e}")
         if "ffmpeg" in str(e).lower():
             st.warning("FFmpeg is missing! Ensure 'packages.txt' contains 'ffmpeg' on your GitHub.")
+
