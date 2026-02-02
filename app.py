@@ -48,7 +48,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- Header Section ---
-st.title(Gemini_Generated_Image_a4qg97a4qg97a4qg.png "Tube-Loader")
+st.title("Tube-Loader")
 st.markdown("##### High-speed video metadata & stream extraction")
 st.info("💡 **Note:** This tool provides a direct stream link for up to 360p/720p playback and saving.")
 
@@ -117,6 +117,7 @@ if video_url or fetch_button:
 # --- Footer ---
 st.markdown("---")
 st.markdown("<center>Made with ❤️ for easy downloading</center>", unsafe_allow_html=True)
+
 
 
 
