@@ -299,7 +299,8 @@ if video_url or fetch_button:
 
 # --- FOOTER ---
 st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
+st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>Made with ❤️ and a little bit hate</center>", unsafe_allow_html=True)
+
 
 
 
