@@ -4,7 +4,7 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="愛 ", 
+    page_icon="☯️", 
     layout="centered"
 )
 
@@ -300,5 +300,6 @@ if video_url or fetch_button:
 # --- FOOTER ---
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
+
 
 
