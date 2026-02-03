@@ -4,216 +4,265 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="🎵", 
+    page_icon="tao", 
     layout="centered"
 )
 
-# --- CRED-Inspired Neo-Brutalism CSS (Symmetrical & High Contrast) ---
+# --- SYMMETRICAL NEO-BRUTALISM CSS ---
 st.markdown("""
     <style>
     /* Import Tech Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
     
-    /* RESET & BASE */
+    /* BASE SETTINGS */
     html, body, [class*="css"] {
         font-family: 'Space Grotesk', sans-serif;
         color: #f0f0f0;
     }
 
-    /* DEEP MATTE CHARCOAL BACKGROUND (Not Pitch Black) */
+    /* BACKGROUND: Deep Charcoal with Symmetrical Grid */
     .stApp {
         background-color: #121212;
         background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        background-size: 50px 50px;
+            linear-gradient(#1a1a1a 1px, transparent 1px),
+            linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: center top; /* Grid aligns to center */
     }
 
-    /* SYMMETRICAL INPUT FIELDS */
+    /* 1. INPUT FIELD: Perfectly Centered */
     .stTextInput>div>div>input {
-        background-color: #1a1a1a;
-        border: 1px solid #333333;
-        border-bottom: 2px solid #ffffff; /* Stark High Contrast */
-        color: #ffffff;
+        background-color: #000000;
+        border: 2px solid #333; /* Even border on all sides */
+        border-bottom: 2px solid #fff;
+        color: #fff;
         border-radius: 0px; 
-        padding: 15px;
+        padding: 20px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 14px;
-        text-align: center; /* Center text for symmetry */
-        transition: all 0.2s ease;
+        text-align: center; /* Text centers from the middle */
+        transition: all 0.3s ease;
+        letter-spacing: 1px;
     }
 
     .stTextInput>div>div>input:focus {
-        background-color: #222;
-        border-color: #ffffff;
+        background-color: #111;
+        border-color: #fff;
+        letter-spacing: 2px; /* Expands on focus */
     }
 
-    /* RADIO BUTTONS (The Toggle) - Centered */
+    /* 2. RADIO TOGGLE: Centered Block */
     div[role="radiogroup"] {
-        background: #1a1a1a;
-        padding: 12px;
-        border: 1px solid #333;
+        background: transparent;
+        border: none;
         display: flex;
-        justify-content: center;
-        border-radius: 0px;
+        justify-content: center; /* Center align items */
+        gap: 20px; /* Symmetrical gap */
         margin-top: 10px;
     }
     
     div[role="radiogroup"] label {
-        color: #999 !important;
+        color: #666 !important;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         font-weight: 700;
-        letter-spacing: 1px;
+        border: 1px solid #333;
+        padding: 8px 16px;
+        background: #000;
+        transition: 0.3s;
+    }
+    
+    /* Highlight the selected option symmetrically */
+    div[role="radiogroup"] [data-baseweb="radio"] {
+        margin-right: 0px;
     }
 
-    /* THE 'CRED' BUTTON - High Contrast & Tactile */
+    /* 3. BUTTON: No Directional Shadow (Symmetry Preserved) */
     .stButton>button {
         width: 100%;
         border-radius: 0px; 
-        height: 4em;
-        background-color: #ffffff;
-        color: #000000;
-        border: 1px solid #ffffff;
+        height: 4.5em;
+        background-color: #000;
+        color: #fff;
+        border: 2px solid #fff;
         font-family: 'Space Grotesk', sans-serif;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        transition: all 0.1s ease;
-        box-shadow: 6px 6px 0px #000000; /* Deep Shadow for Depth */
+        letter-spacing: 3px;
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        position: relative;
+        overflow: hidden;
     }
     
+    /* Hover Effect: Invert Colors (Perfectly balanced) */
     .stButton>button:hover {
-        transform: translate(2px, 2px);
-        box-shadow: 4px 4px 0px #000000;
-        background-color: #e6e6e6;
+        background-color: #fff;
+        color: #000;
+        border-color: #fff;
+        transform: scale(1.02); /* Symmetrical scale */
     }
     
     .stButton>button:active {
-        transform: translate(6px, 6px);
-        box-shadow: none;
+        transform: scale(0.98);
     }
 
-    /* THE CARD - Perfectly Symmetrical Layout */
+    /* 4. THE CARD: Symmetrical Split Layout */
     .video-card {
-        background: #1a1a1a;
-        border: 1px solid #444;
-        border-top: 4px solid #ffffff; /* Top accent for balance */
-        padding: 30px;
-        margin-top: 40px;
+        background: #000;
+        border: 1px solid #333;
+        padding: 0;
+        margin-top: 50px;
         position: relative;
+        display: flex;
+        flex-direction: row; /* Force row layout */
     }
     
-    /* TECH DECORATION */
+    /* Top Accent Bar */
     .video-card::before {
-        content: "DATA_PACKET_RECEIVED";
+        content: "";
         position: absolute;
-        top: -25px;
+        top: 0;
         left: 50%;
-        transform: translateX(-50%); /* Perfectly Centered Tag */
-        background: #121212;
-        color: #666;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-        padding: 5px 10px;
-        border: 1px solid #333;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background: #fff;
     }
 
-    /* HEADERS - Centered */
+    /* Center Badge */
+    .card-badge {
+        text-align: center;
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #121212;
+        border: 1px solid #333;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #888;
+        padding: 2px 10px;
+        letter-spacing: 1px;
+    }
+
+    /* HEADERS */
     h1 {
         font-family: 'Space Grotesk', sans-serif;
         font-weight: 800 !important;
         color: #ffffff;
         text-transform: uppercase;
-        letter-spacing: -1px;
-        font-size: 3.5rem !important;
+        letter-spacing: 4px; /* Wide spacing for grandeur */
+        font-size: 3rem !important;
         text-align: center;
-        margin-bottom: 0px;
+        margin: 0;
+        padding: 0;
     }
     
-    .caption-text {
+    .subtitle {
         font-family: 'JetBrains Mono', monospace;
-        color: #888;
+        color: #444;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        font-size: 0.75rem;
+        font-size: 10px;
+        letter-spacing: 4px;
         text-align: center;
-        margin-bottom: 30px;
-        display: block;
+        margin-top: 10px;
+        margin-bottom: 40px;
+        border-top: 1px solid #333; /* Center line */
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 10px;
     }
-    
+
+    /* CONTENT STYLING */
     h3 {
         font-family: 'Space Grotesk', sans-serif;
         color: #fff;
-        font-weight: 600;
-        font-size: 1.2rem;
-        margin-top: 0;
+        font-weight: 400;
+        font-size: 1.4rem;
+        margin: 0 0 10px 0;
+        line-height: 1.2;
+    }
+
+    .meta-data {
+        font-family: 'JetBrains Mono', monospace;
+        color: #666; 
+        font-size: 11px;
+        letter-spacing: 1px;
+        border-left: 2px solid #fff;
+        padding-left: 10px;
+        margin-bottom: 20px;
     }
 
     /* DOWNLOAD LINK */
     .download-btn {
         display: block;
         width: 100%;
-        padding: 15px 0;
-        background: #000;
-        color: #fff !important;
+        padding: 18px 0;
+        background: #fff;
+        color: #000 !important;
         text-decoration: none;
         border: 1px solid #fff;
         font-family: 'JetBrains Mono', monospace;
-        font-weight: 700;
+        font-weight: 800;
         text-align: center;
         text-transform: uppercase;
-        font-size: 12px;
-        margin-top: 15px;
+        font-size: 11px;
+        letter-spacing: 1px;
         transition: 0.2s;
     }
 
     .download-btn:hover {
-        background: #fff;
-        color: #000 !important;
-        border-color: #000;
+        background: #000;
+        color: #fff !important;
+        border-color: #fff;
     }
     
-    /* Footer */
-    .footer-text {
-        font-family: 'JetBrains Mono', monospace;
-        color: #444;
-        text-transform: uppercase;
-        font-size: 10px;
-        letter-spacing: 2px;
+    /* PREVIEW CONTAINER */
+    .preview-box {
+        border: 1px solid #333;
+        padding: 10px;
+        margin-top: 20px;
+        background: #000;
     }
     
-    /* HIDE STREAMLIT BRANDING */
+    /* UTILS */
+    .center-content {
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        height: 100%;
+    }
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# --- UI Header ---
-st.title("tubeloader...")
-st.markdown("<span class='caption-text'>// SYSTEM_READY // PROTOCOL_INITIATED</span>", unsafe_allow_html=True)
+# --- Header Section (Pure HTML for Center Alignment) ---
+st.markdown("<h1>TUBELOADER</h1>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>SYMMETRY // EXTRACTION // PROTOCOL</div>", unsafe_allow_html=True)
 
 # --- Logic Section ---
-# Centered input via CSS targeting
-video_url = st.text_input("", placeholder="INSERT_SOURCE_URL_HERE")
+video_url = st.text_input("", placeholder="INSERT_TARGET_URL")
 
-# Format Selection Toggle
+# Format Selection
 format_choice = st.radio(
-    "", # Empty label
-    ("VIDEO_STREAM [MP4]", "AUDIO_STREAM [M4A]"),
+    "", # No label
+    ("VIDEO [MP4]", "AUDIO [M4A]"),
     horizontal=True
 )
 
 st.markdown("<br>", unsafe_allow_html=True) 
-fetch_button = st.button("EXECUTE DOWNLOAD")
+fetch_button = st.button("INITIATE SEQUENCE")
 
 if video_url or fetch_button:
     if not video_url:
-        st.info("AWAITING INPUT > WAITING FOR SIGNAL...")
+        st.info("WAITING FOR INPUT STREAM...")
     else:
         try:
-            # Determine format
+            # Logic: Determine format
             if "AUDIO" in format_choice:
                 format_string = 'bestaudio[ext=m4a]/bestaudio/best'
                 is_audio = True
@@ -228,7 +277,7 @@ if video_url or fetch_button:
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...',
             }
             
-            with st.spinner("DECRYPTING STREAM PROTOCOLS..."):
+            with st.spinner("PROCESSING DATA..."):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(video_url, download=False)
                     download_url = info.get('url')
@@ -237,38 +286,46 @@ if video_url or fetch_button:
                     duration = info.get('duration_string')
 
             if download_url:
-                # --- The Symmetrical Card ---
-                st.markdown('<div class="video-card">', unsafe_allow_html=True)
+                # --- The Symmetrical Card Structure ---
+                st.markdown("""
+                    <div class='video-card'>
+                        <div class='card-badge'>PACKET_RECEIVED</div>
+                    </div>
+                """, unsafe_allow_html=True)
                 
-                # Perfect 50/50 Split for Symmetry
-                col1, col2 = st.columns([1, 1], gap="large")
+                # We use Streamlit columns to hold the content inside the "Visual Card"
+                # The visual card is just CSS; the content sits inside these columns
+                c1, c2 = st.columns([1, 1], gap="medium")
                 
-                with col1:
+                with c1:
+                    # Force image to look brutally rectangular
                     st.image(thumbnail, use_container_width=True)
                 
-                with col2:
-                    st.markdown(f"### {title}")
-                    st.markdown(f"<span style='font-family: JetBrains Mono; color: #888; font-size: 12px;'>TIME_INDEX: {duration}</span>", unsafe_allow_html=True)
+                with c2:
+                    # Vertical Alignment Spacer
+                    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+                    st.markdown(f"<h3>{title}</h3>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='meta-data'>DURATION: {duration} // {format_choice}</div>", unsafe_allow_html=True)
                     
-                    btn_text = "ACCESS AUDIO DATA" if is_audio else "ACCESS VIDEO DATA"
+                    btn_text = "DOWNLOAD AUDIO" if is_audio else "DOWNLOAD VIDEO"
                     st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">{btn_text}</a>', unsafe_allow_html=True)
-                
-                st.markdown('</div>', unsafe_allow_html=True)
 
-                st.markdown("<br><center style='font-family: JetBrains Mono; font-size: 12px; color: #666;'>// PREVIEW_MONITOR</center>", unsafe_allow_html=True)
+                # --- Preview Section ---
+                st.markdown("<br><center style='font-family: JetBrains Mono; font-size: 10px; color: #444; letter-spacing: 2px;'>// MEDIA_PREVIEW_WINDOW</center>", unsafe_allow_html=True)
                 
-                if is_audio:
-                    st.audio(download_url, format='audio/mp4')
-                else:
-                    st.video(download_url)
+                # Encapsulate player in a bordered box for neatness
+                with st.container():
+                     if is_audio:
+                        st.audio(download_url, format='audio/mp4')
+                     else:
+                        st.video(download_url)
                 
             else:
-                st.error("ERROR: LINK_RESTRICTED")
+                st.error("ERROR: RESTRICTED_ACCESS")
 
         except Exception as e:
-            st.error("ERROR: INVALID_SIGNAL")
+            st.error("ERROR: INVALID_SIGNAL_PATH")
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<center class='footer-text'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
-
+st.markdown("<center class='footer-text'>DESIGNED FOR BALANCE.</center>", unsafe_allow_html=True)
