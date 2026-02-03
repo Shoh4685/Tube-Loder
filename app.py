@@ -4,7 +4,7 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="☯︎", 
+    page_icon="愛 ", 
     layout="centered"
 )
 
@@ -219,7 +219,7 @@ video_url = st.text_input("", placeholder="PASTE_SOURCE_URL_HERE")
 # though CSS handles the flex centering.
 format_choice = st.radio(
     "",
-    ("VIDEO_STREAM [MP4]", "AUDIO_STREAM [M4A]"),
+    ("VIDEO [MP4]", "AUDIO [M4A]"),
     horizontal=True,
     label_visibility="collapsed"
 )
@@ -300,4 +300,5 @@ if video_url or fetch_button:
 # --- FOOTER ---
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
+
 
