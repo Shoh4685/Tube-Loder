@@ -11,132 +11,120 @@ st.set_page_config(
 # --- Modern Minimalist CSS ---
 st.markdown("""
     <style>
-    /* --- Global Variables --- */
-    :root {
-        --bg-color: #0f172a;
-        --card-bg: rgba(30, 41, 59, 0.7);
-        --accent-color: #6366f1; /* Soft Indigo */
-        --text-primary: #f8fafc;
-        --text-secondary: #94a3b8;
-    }
-
-    /* --- Background & App Container --- */
-    .stApp {
-        background-color: var(--bg-color);
-        background-image: radial-gradient(at 50% 0%, #1e293b 0px, transparent 50%),
-                          radial-gradient(at 100% 0%, #312e81 0px, transparent 20%);
+    /* Global Reset & Font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+    
+    html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
     }
 
-    /* --- Typography --- */
-    h1 {
-        font-weight: 700 !important;
-        color: var(--text-primary) !important;
-        letter-spacing: -0.5px;
-        margin-bottom: 0.2rem !important;
-    }
-    
-    p {
-        color: var(--text-secondary) !important;
+    /* Deep Soothing Background */
+    .stApp {
+        background-color: #0E1117;
+        background-image: radial-gradient(circle at 50% 0%, #1c212e 0%, #0E1117 50%);
+        background-attachment: fixed;
     }
 
-    /* --- Input Field --- */
+    /* Minimalist Input Field */
     .stTextInput>div>div>input {
-        border-radius: 16px;
-        background-color: rgba(255, 255, 255, 0.03);
-        color: var(--text-primary);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 12px 15px;
-        transition: all 0.3s ease;
-    }
-    
-    .stTextInput>div>div>input:focus {
-        border-color: var(--accent-color);
-        background-color: rgba(255, 255, 255, 0.05);
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        color: #e6edf3;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
     }
 
-    /* --- Main Action Button --- */
+    .stTextInput>div>div>input:focus {
+        border-color: #58a6ff;
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+    }
+
+    /* Modern Primary Button (Monochrome) */
     .stButton>button {
         width: 100%;
-        border-radius: 16px;
-        height: 3.2em;
-        background: var(--accent-color);
-        color: white;
+        border-radius: 10px;
+        height: 3em;
+        background-color: #f0f6fc;
+        color: #0f1117;
         border: none;
         font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     
     .stButton>button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
-        background-color: #4f46e5;
+        background-color: #ffffff;
+        box-shadow: 0 8px 15px rgba(255,255,255,0.1);
     }
 
-    /* --- Result Card (Glassmorphism) --- */
+    /* Sleek Content Card */
     .video-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 24px;
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 16px;
         padding: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        margin-top: 30px;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        margin-top: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Titles */
+    h1 {
+        font-weight: 700 !important;
+        color: #f0f6fc;
+        letter-spacing: -0.5px;
     }
     
-    .video-card h3 {
-        margin-top: 0;
-        font-size: 1.2rem;
+    h3 {
         font-weight: 600;
-        color: var(--text-primary);
+        color: #f0f6fc;
+        margin-top: 0;
     }
 
-    /* --- Download Link Button --- */
+    /* Link Button */
     .download-btn {
-        display: inline-block;
-        width: 100%;
-        padding: 12px 0;
-        background-color: rgba(255, 255, 255, 0.05);
-        color: var(--text-primary) !important;
+        display: block;
+        padding: 12px;
+        background: #238636;
+        color: #ffffff !important;
         text-decoration: none;
-        border-radius: 12px;
+        border-radius: 8px;
         font-weight: 500;
         text-align: center;
-        margin-top: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.2s;
+        margin-top: 15px;
+        transition: 0.2s;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .download-btn:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: #2ea043;
+        transform: scale(1.01);
     }
     
-    /* --- Video Player Container --- */
-    .stVideo {
-        border-radius: 20px;
-        overflow: hidden;
-        margin-top: 20px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    /* Footer Opacity */
+    .footer-text {
+        opacity: 0.4; 
+        font-size: 0.8rem; 
+        color: #8b949e;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- UI Header ---
-st.title("TubeLoader")
-st.markdown("Premium extraction. Minimalist design.")
+col1, col2, col3 = st.columns([1, 6, 1])
+with col2:
+    st.title("TubeLoader")
+    st.caption("Minimalist stream extraction tool.")
 
 # --- Logic Section ---
-video_url = st.text_input("", placeholder="Paste video link here...")
-fetch_button = st.button("Extract Media")
+video_url = st.text_input("", placeholder="Paste video URL here...")
+fetch_button = st.button("Analyze & Download")
 
 if video_url or fetch_button:
     if not video_url:
-        st.info("Please input a URL to proceed.")
+        st.info("Please enter a valid URL to begin.")
     else:
         try:
             ydl_opts = {
@@ -146,7 +134,7 @@ if video_url or fetch_button:
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             }
             
-            with st.spinner("Analyzing stream data..."):
+            with st.spinner("Processing stream data..."):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(video_url, download=False)
                     download_url = info.get('url')
@@ -155,7 +143,7 @@ if video_url or fetch_button:
                     duration = info.get('duration_string')
 
             if download_url:
-                # --- The Modern Card ---
+                # --- The Sleek Card ---
                 st.markdown('<div class="video-card">', unsafe_allow_html=True)
                 col1, col2 = st.columns([1, 1.2], gap="large")
                 
@@ -164,9 +152,9 @@ if video_url or fetch_button:
                 
                 with col2:
                     st.markdown(f"### {title}")
-                    st.markdown(f"<p style='font-size:0.9rem; opacity:0.8;'>Duration: {duration}</p>", unsafe_allow_html=True)
-                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">Open Raw Stream ↗</a>', unsafe_allow_html=True)
-                    st.caption("Right-click video player to 'Save As'")
+                    st.markdown(f"<span style='color: #8b949e;'>Duration: {duration}</span>", unsafe_allow_html=True)
+                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">Open Stream</a>', unsafe_allow_html=True)
+                    st.caption("Right-click the player below to save.")
                 
                 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -174,11 +162,11 @@ if video_url or fetch_button:
                 st.video(download_url)
                 
             else:
-                st.error("Link extraction failed. Try a different URL.")
+                st.error("Could not extract link. The video might be restricted.")
 
         except Exception as e:
-            st.error("Access denied or invalid URL.")
+            st.error("Unable to process this URL. Please check the link.")
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<center style='opacity: 0.3; font-size: 0.75rem; font-family: monospace;'>Made with code & conscience</center>", unsafe_allow_html=True)
+st.markdown("<center class='footer-text'>Simplicity in a complex world.</center>", unsafe_allow_html=True)
