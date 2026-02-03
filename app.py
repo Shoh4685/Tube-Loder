@@ -209,7 +209,7 @@ st.markdown("""
 
 # --- HEADER SECTION ---
 st.markdown('<div class="main-title">TUBELOADER</div>', unsafe_allow_html=True)
-st.markdown("<br><center style='font-family: JetBrains Mono; font-size: 10px; color: #444; letter-spacing: 2px;'>// Unlimited Download without ads</center><br>", unsafe_allow_html=True)
+st.markdown('<h2 class="sub-title"><span></span></h2>', unsafe_allow_html=True)
 
 # --- INPUT SECTION ---
 video_url = st.text_input("", placeholder="PASTE_SOURCE_URL_HERE")
