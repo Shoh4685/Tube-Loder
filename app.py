@@ -207,6 +207,33 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+import streamlit as st
+
+# Custom CSS for the "Deloitte-style" Tubeloader logo
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+
+    .deloitte-style {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: -1.5px;
+        color: #FFFFFF; /* Main text color */
+        display: flex;
+        align-items: baseline;
+    }
+
+    .dot {
+        color: #FFFFFF; /* The white dot */
+        margin-left: 2px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# The Title Implementation
+st.markdown('<div class="deloitte-style">TUBELOADER<span class="dot">.</span></div>', unsafe_allow_html=True)
+
 # --- HEADER SECTION ---
 st.markdown('<div class="main-title">TUBELOADER</div>', unsafe_allow_html=True)
 st.markdown('<h2 class="sub-title"><span></span></h2>', unsafe_allow_html=True)
@@ -300,6 +327,7 @@ if video_url or fetch_button:
 # --- FOOTER ---
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>Made with ❤️ and a little bit hate</center>", unsafe_allow_html=True)
+
 
 
 
