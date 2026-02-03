@@ -4,7 +4,7 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="Page icon.png", 
+    page_icon="🎵", 
     layout="centered"
 )
 
@@ -120,6 +120,14 @@ with col2:
 
 # --- Logic Section ---
 video_url = st.text_input("", placeholder="Paste video URL here...")
+
+# New: Format Selection Toggle
+format_choice = st.radio(
+    "Select Format:",
+    ("Video (MP4)", "Audio Only (M4A)"),
+    horizontal=True
+)
+
 fetch_button = st.button("Analyze & Download")
 
 if video_url or fetch_button:
@@ -127,8 +135,14 @@ if video_url or fetch_button:
         st.info("Please enter a valid URL to begin.")
     else:
         try:
+            # Determine format based on user choice
+            if format_choice == "Audio Only (M4A)":
+                format_string = 'bestaudio[ext=m4a]/bestaudio/best'
+            else:
+                format_string = 'best[ext=mp4]/best'
+
             ydl_opts = {
-                'format': 'best[ext=mp4]/best',
+                'format': format_string,
                 'quiet': True,
                 'no_warnings': True,
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
@@ -153,13 +167,22 @@ if video_url or fetch_button:
                 with col2:
                     st.markdown(f"### {title}")
                     st.markdown(f"<span style='color: #8b949e;'>Duration: {duration}</span>", unsafe_allow_html=True)
-                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">Open Stream</a>', unsafe_allow_html=True)
+                    
+                    # Button text changes based on format
+                    btn_text = "Open Audio Stream" if format_choice == "Audio Only (M4A)" else "Open Video Stream"
+                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">{btn_text}</a>', unsafe_allow_html=True)
+                    
                     st.caption("Right-click the player below to save.")
                 
                 st.markdown('</div>', unsafe_allow_html=True)
 
                 st.markdown("#### Preview")
-                st.video(download_url)
+                
+                # Smart Preview: Audio player for Audio mode, Video player for Video mode
+                if format_choice == "Audio Only (M4A)":
+                    st.audio(download_url, format='audio/mp4')
+                else:
+                    st.video(download_url)
                 
             else:
                 st.error("Could not extract link. The video might be restricted.")
