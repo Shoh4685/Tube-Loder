@@ -3,7 +3,7 @@ import yt_dlp
 
 # --- Page Config ---
 st.set_page_config(
-    page_title="TubeLoader", 
+    page_title="tubeLoader...", 
     page_icon="⚖️", 
     layout="centered"
 )
@@ -275,3 +275,4 @@ with col_main:
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("<center class='footer-text'>FORM FOLLOWS FUNCTION</center>", unsafe_allow_html=True)
+
