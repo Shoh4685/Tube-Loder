@@ -4,7 +4,7 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="🖤", 
+    page_icon="🎵", 
     layout="centered"
 )
 
@@ -191,7 +191,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- UI Header ---
-st.title("TUBELOADER")
+st.title("tubeloader...")
 st.markdown("<span class='caption-text'>// SYSTEM_READY // PROTOCOL_INITIATED</span>", unsafe_allow_html=True)
 
 # --- Logic Section ---
@@ -271,3 +271,4 @@ if video_url or fetch_button:
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("<center class='footer-text'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
+
