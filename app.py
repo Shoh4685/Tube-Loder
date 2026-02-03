@@ -4,22 +4,23 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="black_circle", 
+    page_icon="🖤", 
     layout="centered"
 )
 
 # --- CRED-Inspired Neo-Brutalism CSS ---
 st.markdown("""
     <style>
-    /* Import Fonts: Space Grotesk (Headings) & JetBrains Mono (Tech/Data) */
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
+    /* Import Tech Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
     
+    /* RESET & BASE */
     html, body, [class*="css"] {
         font-family: 'Space Grotesk', sans-serif;
         color: #e0e0e0;
     }
 
-    /* PITCH BLACK BACKGROUND WITH GRID */
+    /* PITCH BLACK BACKGROUND WITH SUBTLE GRID */
     .stApp {
         background-color: #000000;
         background-image: 
@@ -28,218 +29,241 @@ st.markdown("""
         background-size: 40px 40px;
     }
 
-    /* TECH INPUT FIELD */
+    /* NEO-BRUTALIST INPUT FIELDS */
     .stTextInput>div>div>input {
-        background-color: #090909 !important;
-        border: 1px solid #333 !important;
-        color: #fff !important;
-        border-radius: 0px !important; /* Brutalist sharp edges */
+        background-color: #000000;
+        border: 1px solid #333333;
+        border-bottom: 2px solid #ffffff; /* Stark underline */
+        color: #ffffff;
+        border-radius: 0px; /* Sharp edges */
         padding: 15px;
         font-family: 'JetBrains Mono', monospace;
-        letter-spacing: -0.5px;
-        transition: all 0.3s;
+        font-size: 14px;
+        transition: all 0.2s ease;
     }
 
     .stTextInput>div>div>input:focus {
-        border-color: #fff !important;
-        background-color: #000 !important;
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        background-color: #0a0a0a;
+        border-color: #ffffff;
+        box-shadow: none;
     }
 
-    /* PREMIUM 'HYPER-WHITE' ACTION BUTTON */
+    /* RADIO BUTTONS (The Toggle) */
+    div[role="radiogroup"] {
+        background: #0a0a0a;
+        padding: 10px;
+        border: 1px solid #333;
+        display: flex;
+        justify-content: center;
+        border-radius: 0px;
+    }
+    
+    div[role="radiogroup"] label {
+        color: #888 !important;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    div[role="radiogroup"] [data-baseweb="radio"] > div:first-child {
+        background-color: #000 !important;
+        border: 1px solid #555 !important;
+    }
+
+    /* THE 'CRED' BUTTON - High Contrast, Physical Feel */
     .stButton>button {
         width: 100%;
-        border-radius: 0px; /* Sharp */
+        border-radius: 0px; /* Brutalist Square */
         height: 3.5em;
         background-color: #ffffff;
         color: #000000;
         border: 1px solid #ffffff;
         font-family: 'Space Grotesk', sans-serif;
-        font-weight: 800;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
-        transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        box-shadow: 0 0 0 transparent;
+        transition: all 0.1s ease;
+        box-shadow: 4px 4px 0px #333333; /* Hard Shadow */
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 5px 5px 0px #333; /* Brutalist shadow offset */
-        border-color: #fff;
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px #333333;
         background-color: #f0f0f0;
         color: #000;
-    }
-
-    .stButton>button:active {
-        transform: translateY(0px);
-        box-shadow: 0px 0px 0px transparent;
-    }
-
-    /* MONOLITH CARD STYLE */
-    .video-card {
-        background: #050505;
-        border: 1px solid #222;
-        padding: 0px;
-        margin-top: 30px;
-        position: relative;
-        overflow: hidden;
+        border-color: #fff;
     }
     
-    /* Decorative 'CRED' Bar at top of card */
-    .video-card::before {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, #cb9b51, #f6e27a, #cb9b51); /* Gold/Copper Gradient */
+    .stButton>button:active {
+        transform: translate(4px, 4px);
+        box-shadow: none;
     }
 
-    .card-content {
+    /* THE CARD - Raw & Industrial */
+    .video-card {
+        background: #050505;
+        border: 1px solid #333;
+        border-left: 4px solid #ffffff; /* Accent border */
         padding: 25px;
+        margin-top: 30px;
+        position: relative;
+    }
+    
+    /* RETRO TECH DECORATION ON CARD */
+    .video-card::after {
+        content: "RAW_DATA_STREAM";
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        background: #000;
+        color: #555;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        padding: 0 5px;
     }
 
-    /* HEADINGS */
+    /* HEADERS */
     h1 {
         font-family: 'Space Grotesk', sans-serif;
-        font-weight: 800 !important;
+        font-weight: 700 !important;
         color: #ffffff;
+        text-transform: uppercase;
         letter-spacing: -2px;
-        text-transform: lowercase;
         font-size: 3rem !important;
+        text-shadow: 2px 2px 0px #333;
+    }
+    
+    .caption-text {
+        font-family: 'JetBrains Mono', monospace;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.7rem;
+        margin-bottom: 20px;
     }
     
     h3 {
         font-family: 'Space Grotesk', sans-serif;
-        font-weight: 700;
-        color: #ffffff;
-        letter-spacing: -0.5px;
-        margin-top: 0;
+        color: #fff;
+        font-weight: 500;
     }
 
-    /* DOWNLOAD LINK BUTTON (The 'Claim' Button style) */
+    /* DOWNLOAD LINK - Monospaced Tag */
     .download-btn {
-        display: block;
-        padding: 14px;
-        background: #1a1a1a;
-        color: #cb9b51 !important; /* Gold text */
+        display: inline-block;
+        width: 100%;
+        padding: 15px 0;
+        background: #000;
+        color: #fff !important;
         text-decoration: none;
-        border: 1px solid #333;
+        border: 1px solid #fff;
         font-family: 'JetBrains Mono', monospace;
         font-weight: 700;
         text-align: center;
-        margin-top: 20px;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: 0.3s;
+        font-size: 12px;
+        margin-top: 20px;
+        transition: 0.2s;
     }
 
     .download-btn:hover {
-        background: #cb9b51;
+        background: #fff;
         color: #000 !important;
-        border-color: #cb9b51;
     }
     
-    /* RADIO BUTTONS (Custom Hack) */
-    div[role="radiogroup"] > label > div:first-child {
-        background-color: #000;
-        border-color: #333;
-    }
-    div[role="radiogroup"] > label > div:first-child[data-checked="true"] {
-        background-color: #fff !important;
-        border-color: #fff !important;
-    }
-
-    /* FOOTER */
+    /* Footer */
     .footer-text {
         font-family: 'JetBrains Mono', monospace;
-        opacity: 0.3; 
-        font-size: 0.7rem; 
-        color: #fff;
+        color: #444;
         text-transform: uppercase;
+        font-size: 10px;
         letter-spacing: 2px;
     }
+    
+    /* HIDE STREAMLIT BRANDING */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
 # --- UI Header ---
-col1, col2, col3 = st.columns([1, 6, 1])
+col1, col2, col3 = st.columns([1, 8, 1])
 with col2:
-    st.title("tube.loader") # Lowercase for that 'cool' tech brand feel
-    st.markdown("<p style='font-family: \"JetBrains Mono\"; opacity: 0.5; margin-top: -20px;'>/// SYSTEM.EXTRACT_STREAM</p>", unsafe_allow_html=True)
+    st.title("TUBELOADER")
+    st.markdown("<p class='caption-text'>// SYSTEM.READY // MODE: EXTRACTION</p>", unsafe_allow_html=True)
 
 # --- Logic Section ---
-st.markdown("<br>", unsafe_allow_html=True)
-video_url = st.text_input("", placeholder="INPUT_SOURCE_URL")
+video_url = st.text_input("", placeholder="ENTER_SOURCE_URL")
 
-st.markdown("<br>", unsafe_allow_html=True)
 # Format Selection Toggle
 format_choice = st.radio(
-    "",
-    ("Video (MP4)", "Audio Only (M4A)"),
+    "", # Empty label for cleaner look
+    ("VIDEO_STREAM [MP4]", "AUDIO_STREAM [M4A]"),
     horizontal=True
 )
 
-st.markdown("<br>", unsafe_allow_html=True)
-fetch_button = st.button("INITIATE DOWNLOAD")
+st.markdown("<br>", unsafe_allow_html=True) # Spacer
+fetch_button = st.button("INITIALIZE DOWNLOAD")
 
 if video_url or fetch_button:
     if not video_url:
-        st.info("Input required.")
+        st.info("Input required > Waiting for signal...")
     else:
         try:
             # Determine format based on user choice
-            if format_choice == "Audio Only (M4A)":
+            if "AUDIO" in format_choice:
                 format_string = 'bestaudio[ext=m4a]/bestaudio/best'
+                is_audio = True
             else:
                 format_string = 'best[ext=mp4]/best'
+                is_audio = False
 
             ydl_opts = {
                 'format': format_string,
                 'quiet': True,
                 'no_warnings': True,
-                'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...',
             }
             
-            with st.spinner("DECRYPTING STREAM..."):
+            with st.spinner("Decrypting Stream Protocols..."):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(video_url, download=False)
                     download_url = info.get('url')
-                    title = info.get('title', 'Video Content')
+                    title = info.get('title', 'UNKNOWN_ASSET')
                     thumbnail = info.get('thumbnail')
                     duration = info.get('duration_string')
 
             if download_url:
-                # --- The Monolith Card ---
-                st.markdown('<div class="video-card"><div class="card-content">', unsafe_allow_html=True)
-                col1, col2 = st.columns([1, 1.2], gap="large")
+                # --- The Brutalist Card ---
+                st.markdown('<div class="video-card">', unsafe_allow_html=True)
+                col1, col2 = st.columns([1, 1.3], gap="large")
                 
                 with col1:
                     st.image(thumbnail, use_container_width=True)
                 
                 with col2:
                     st.markdown(f"### {title}")
-                    st.markdown(f"<span style='font-family: \"JetBrains Mono\"; color: #666;'>DURATION :: {duration}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span style='font-family: JetBrains Mono; color: #666; font-size: 12px;'>TIME_INDEX: {duration}</span>", unsafe_allow_html=True)
                     
-                    # Button text changes based on format
-                    btn_text = "ACCESS AUDIO" if format_choice == "Audio Only (M4A)" else "ACCESS VIDEO"
+                    btn_text = "ACCESS AUDIO DATA" if is_audio else "ACCESS VIDEO DATA"
                     st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">{btn_text}</a>', unsafe_allow_html=True)
                 
-                st.markdown('</div></div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
-                st.markdown("<br>#### PREVIEW_STREAM", unsafe_allow_html=True)
+                st.markdown("<br><p style='font-family: JetBrains Mono; font-size: 12px; color: #fff;'>// PREVIEW_MONITOR</p>", unsafe_allow_html=True)
                 
-                # Smart Preview
-                if format_choice == "Audio Only (M4A)":
+                if is_audio:
                     st.audio(download_url, format='audio/mp4')
                 else:
                     st.video(download_url)
                 
             else:
-                st.error("STREAM ERROR: RESTRICTED")
+                st.error("ERROR: LINK_RESTRICTED")
 
         except Exception as e:
-            st.error("SYSTEM ERROR: INVALID INPUT")
+            st.error("ERROR: INVALID_SIGNAL")
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<center class='footer-text'>NO_CAPITALISM.PY // V.2.0</center>", unsafe_allow_html=True)
+st.markdown("<center class='footer-text'>DESIGNED FOR EFFICIENCY. BUILT FOR SPEED.</center>", unsafe_allow_html=True)
