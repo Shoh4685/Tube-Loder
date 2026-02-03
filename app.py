@@ -209,7 +209,7 @@ st.markdown("""
 
 # --- HEADER SECTION ---
 st.markdown('<div class="main-title">TUBELOADER</div>', unsafe_allow_html=True)
-st.markdown('<h2 class="sub-title"><span>SYMMETRICAL EXTRACTION PROTOCOL</span></h2>', unsafe_allow_html=True)
+st.markdown('<h2 class="sub-title"><span></span></h2>', unsafe_allow_html=True)
 
 # --- INPUT SECTION ---
 video_url = st.text_input("", placeholder="PASTE_SOURCE_URL_HERE")
@@ -300,6 +300,7 @@ if video_url or fetch_button:
 # --- FOOTER ---
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("<center style='font-family: JetBrains Mono; font-size: 10px; color: #333;'>SYMMETRY // EFFICIENCY // SPEED</center>", unsafe_allow_html=True)
+
 
 
 
