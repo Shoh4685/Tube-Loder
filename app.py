@@ -4,167 +4,190 @@ import yt_dlp
 # --- Page Config ---
 st.set_page_config(
     page_title="TubeLoader", 
-    page_icon="💳", 
+    page_icon="black_circle", 
     layout="centered"
 )
 
 # --- CRED-Inspired Neo-Brutalism CSS ---
 st.markdown("""
     <style>
-    /* Import Premium Tech Font */
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+    /* Import Fonts: Space Grotesk (Headings) & JetBrains Mono (Tech/Data) */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Space Grotesk', sans-serif;
-        background-color: #000000;
-        color: #FFFFFF;
+        color: #e0e0e0;
     }
 
-    /* True Pitch Black Background with subtle noise */
+    /* PITCH BLACK BACKGROUND WITH GRID */
     .stApp {
         background-color: #000000;
-        background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
-        background-attachment: fixed;
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
     }
 
-    /* Input Field: The "Terminal" Look */
+    /* TECH INPUT FIELD */
     .stTextInput>div>div>input {
-        background-color: transparent !important;
-        border: none;
-        border-bottom: 2px solid #333;
-        color: #E2B77A; /* Copper Text */
-        border-radius: 0px;
-        padding: 15px 5px;
-        font-size: 18px;
-        font-family: 'Space Grotesk', monospace;
-        letter-spacing: 1px;
-        transition: all 0.3s ease;
+        background-color: #090909 !important;
+        border: 1px solid #333 !important;
+        color: #fff !important;
+        border-radius: 0px !important; /* Brutalist sharp edges */
+        padding: 15px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: -0.5px;
+        transition: all 0.3s;
     }
 
     .stTextInput>div>div>input:focus {
-        border-bottom: 2px solid #E2B77A;
-        box-shadow: none;
-        color: #fff;
+        border-color: #fff !important;
+        background-color: #000 !important;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
     }
 
-    /* The "CRED" Button */
+    /* PREMIUM 'HYPER-WHITE' ACTION BUTTON */
     .stButton>button {
         width: 100%;
-        border-radius: 0px; /* Sharp edges */
-        height: 4em;
-        background-color: #FFFFFF;
+        border-radius: 0px; /* Sharp */
+        height: 3.5em;
+        background-color: #ffffff;
         color: #000000;
-        border: 1px solid #FFFFFF;
+        border: 1px solid #ffffff;
+        font-family: 'Space Grotesk', sans-serif;
         font-weight: 800;
-        font-size: 14px;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        box-shadow: 5px 5px 0px 0px #333; /* Hard shadow */
+        letter-spacing: 1px;
+        transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        box-shadow: 0 0 0 transparent;
     }
     
     .stButton>button:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 8px 8px 0px 0px #E2B77A; /* Copper shadow on hover */
-        border-color: #E2B77A;
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0px #333; /* Brutalist shadow offset */
+        border-color: #fff;
+        background-color: #f0f0f0;
+        color: #000;
     }
 
-    /* Radio Buttons */
-    .stRadio > div {
-        background-color: #111;
-        padding: 10px;
-        border: 1px solid #333;
+    .stButton>button:active {
+        transform: translateY(0px);
+        box-shadow: 0px 0px 0px transparent;
     }
 
-    /* The "Premium Ticket" Card */
+    /* MONOLITH CARD STYLE */
     .video-card {
-        background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-        border: 1px solid #333;
-        border-top: 4px solid #E2B77A; /* Copper Top Border */
+        background: #050505;
+        border: 1px solid #222;
         padding: 0px;
         margin-top: 30px;
         position: relative;
         overflow: hidden;
+    }
+    
+    /* Decorative 'CRED' Bar at top of card */
+    .video-card::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #cb9b51, #f6e27a, #cb9b51); /* Gold/Copper Gradient */
     }
 
     .card-content {
         padding: 25px;
     }
 
-    /* Typography Override */
+    /* HEADINGS */
     h1 {
+        font-family: 'Space Grotesk', sans-serif;
         font-weight: 800 !important;
-        color: #FFFFFF;
-        font-size: 3.5rem !important;
+        color: #ffffff;
         letter-spacing: -2px;
         text-transform: lowercase;
+        font-size: 3rem !important;
     }
     
     h3 {
+        font-family: 'Space Grotesk', sans-serif;
         font-weight: 700;
-        color: #fff;
-        font-size: 1.5rem;
-        margin-bottom: 5px;
-        line-height: 1.2;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+        margin-top: 0;
     }
 
-    /* The Action Link */
+    /* DOWNLOAD LINK BUTTON (The 'Claim' Button style) */
     .download-btn {
         display: block;
-        padding: 18px;
-        background: #111;
-        color: #E2B77A !important;
+        padding: 14px;
+        background: #1a1a1a;
+        color: #cb9b51 !important; /* Gold text */
         text-decoration: none;
         border: 1px solid #333;
+        font-family: 'JetBrains Mono', monospace;
         font-weight: 700;
         text-align: center;
-        text-transform: uppercase;
-        letter-spacing: 2px;
         margin-top: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         transition: 0.3s;
     }
 
     .download-btn:hover {
-        background: #E2B77A;
+        background: #cb9b51;
         color: #000 !important;
-        border-color: #E2B77A;
+        border-color: #cb9b51;
     }
     
+    /* RADIO BUTTONS (Custom Hack) */
+    div[role="radiogroup"] > label > div:first-child {
+        background-color: #000;
+        border-color: #333;
+    }
+    div[role="radiogroup"] > label > div:first-child[data-checked="true"] {
+        background-color: #fff !important;
+        border-color: #fff !important;
+    }
+
+    /* FOOTER */
     .footer-text {
-        font-family: 'Space Grotesk', monospace;
+        font-family: 'JetBrains Mono', monospace;
+        opacity: 0.3; 
+        font-size: 0.7rem; 
+        color: #fff;
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-size: 10px;
-        color: #444;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- UI Header ---
-col1, col2, col3 = st.columns([1, 10, 1])
+col1, col2, col3 = st.columns([1, 6, 1])
 with col2:
-    st.markdown("<h1>tubeloader<span style='color:#E2B77A'>.</span></h1>", unsafe_allow_html=True)
-    st.markdown("<p style='font-family: monospace; color: #666;'>EXPERIENCE THE DOWNLOAD.</p>", unsafe_allow_html=True)
+    st.title("tube.loader") # Lowercase for that 'cool' tech brand feel
+    st.markdown("<p style='font-family: \"JetBrains Mono\"; opacity: 0.5; margin-top: -20px;'>/// SYSTEM.EXTRACT_STREAM</p>", unsafe_allow_html=True)
 
 # --- Logic Section ---
-video_url = st.text_input("", placeholder="PASTE_URL_HERE_")
-
-# Format Selection
 st.markdown("<br>", unsafe_allow_html=True)
+video_url = st.text_input("", placeholder="INPUT_SOURCE_URL")
+
+st.markdown("<br>", unsafe_allow_html=True)
+# Format Selection Toggle
 format_choice = st.radio(
     "",
     ("Video (MP4)", "Audio Only (M4A)"),
     horizontal=True
 )
-st.markdown("<br>", unsafe_allow_html=True)
 
-fetch_button = st.button("PROCEED TO EXTRACT")
+st.markdown("<br>", unsafe_allow_html=True)
+fetch_button = st.button("INITIATE DOWNLOAD")
 
 if video_url or fetch_button:
     if not video_url:
-        st.info("INPUT_REQUIRED")
+        st.info("Input required.")
     else:
         try:
+            # Determine format based on user choice
             if format_choice == "Audio Only (M4A)":
                 format_string = 'bestaudio[ext=m4a]/bestaudio/best'
             else:
@@ -177,7 +200,7 @@ if video_url or fetch_button:
                 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             }
             
-            with st.spinner("AUTHENTICATING STREAM..."):
+            with st.spinner("DECRYPTING STREAM..."):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(video_url, download=False)
                     download_url = info.get('url')
@@ -186,34 +209,37 @@ if video_url or fetch_button:
                     duration = info.get('duration_string')
 
             if download_url:
-                # --- The "Ticket" Card ---
-                st.markdown('<div class="video-card">', unsafe_allow_html=True)
+                # --- The Monolith Card ---
+                st.markdown('<div class="video-card"><div class="card-content">', unsafe_allow_html=True)
+                col1, col2 = st.columns([1, 1.2], gap="large")
                 
-                # Image Section
-                st.image(thumbnail, use_container_width=True)
+                with col1:
+                    st.image(thumbnail, use_container_width=True)
                 
-                # Content Section
-                st.markdown('<div class="card-content">', unsafe_allow_html=True)
-                st.markdown(f"### {title}")
-                st.markdown(f"<p style='color: #666; font-family: monospace;'>DURATION: {duration} // FMT: {format_choice.upper()}</p>", unsafe_allow_html=True)
+                with col2:
+                    st.markdown(f"### {title}")
+                    st.markdown(f"<span style='font-family: \"JetBrains Mono\"; color: #666;'>DURATION :: {duration}</span>", unsafe_allow_html=True)
+                    
+                    # Button text changes based on format
+                    btn_text = "ACCESS AUDIO" if format_choice == "Audio Only (M4A)" else "ACCESS VIDEO"
+                    st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">{btn_text}</a>', unsafe_allow_html=True)
                 
-                btn_text = "ACCESS AUDIO" if format_choice == "Audio Only (M4A)" else "ACCESS VIDEO"
-                st.markdown(f'<a href="{download_url}" target="_blank" class="download-btn">{btn_text}</a>', unsafe_allow_html=True)
                 st.markdown('</div></div>', unsafe_allow_html=True)
 
-                st.markdown("<br><br>", unsafe_allow_html=True)
+                st.markdown("<br>#### PREVIEW_STREAM", unsafe_allow_html=True)
                 
+                # Smart Preview
                 if format_choice == "Audio Only (M4A)":
                     st.audio(download_url, format='audio/mp4')
                 else:
                     st.video(download_url)
                 
             else:
-                st.error("RESTRICTED_ACCESS")
+                st.error("STREAM ERROR: RESTRICTED")
 
         except Exception as e:
-            st.error("CONNECTION_REFUSED")
+            st.error("SYSTEM ERROR: INVALID INPUT")
 
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.markdown("<center class='footer-text'>MEMBERS ONLY // TUBE_LOADER v2.0</center>", unsafe_allow_html=True)
+st.markdown("<center class='footer-text'>NO_CAPITALISM.PY // V.2.0</center>", unsafe_allow_html=True)
