@@ -201,7 +201,7 @@ col_spacer1, col_main, col_spacer2 = st.columns([1, 6, 1])
 
 with col_main:
     st.title("  ""tubeloader...")
-    st.markdown("<div class='caption-text'>SYSTEM_READY // MODE: SYMMETRICAL_EXTRACTION</div>", unsafe_allow_html=True)
+    st.markdown("<div class='caption-text'>SYSTEM_READY // MODE: EXTRACTION</div>", unsafe_allow_html=True)
 
     # --- Logic Section ---
     video_url = st.text_input("", placeholder="INSERT_SOURCE_URL")
@@ -275,6 +275,7 @@ with col_main:
 # --- Footer ---
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown("<center class='footer-text'>FORM FOLLOWS FUNCTION</center>", unsafe_allow_html=True)
+
 
 
 
